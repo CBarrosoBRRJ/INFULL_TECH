@@ -134,19 +134,28 @@ import undetected_chromedriver as uc
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 def iniciar_navegador():
     try:
+        # Configurações do Chrome
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")  # Executar sem interface gráfica
-        options.add_argument("--disable-blink-features=AutomationControlled")
+        options.add_argument("--headless")  # Sem interface gráfica
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
-
-        navegador = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        
+        # Inicializar o ChromeDriver com Service
+        service = Service(ChromeDriverManager().install())
+        navegador = webdriver.Chrome(service=service, options=options)
+        
+        print("Navegador inicializado com sucesso!")
         return navegador
     except Exception as e:
         print(f"Erro ao inicializar o navegador: {e}")
         return None
+
 
 
 
