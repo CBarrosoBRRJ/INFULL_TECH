@@ -27,7 +27,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import undetected_chromedriver as uc
-import tkinter as tk
 from selenium.webdriver import ActionChains
 import matplotlib.pyplot as plt
 from tkinter import messagebox
@@ -734,48 +733,6 @@ def loop(navegador, lista_empresas):
 
 #FIM
 # ---------------------------------------------------------------------------------------------------------------------- #
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------- #
-#INICIO
-
-def mensagem_fim_script():
-    """
-    Abre uma janela com a mensagem final indicando que o script terminou.
-    """
-    # Cria a janela principal
-    root = tk.Tk()
-    root.title("Script Finalizado")
-    root.geometry("400x200")  # Define o tamanho da janela
-
-    # Mensagem principal
-    label_mensagem = tk.Label(
-        root,
-        text="O SCRIPT ACABOU,\nPode fechar a tela e trabalhar os dados baixados.",
-        font=("Arial", 12),
-        wraplength=350,  # Limita o tamanho do texto
-        justify="center"
-    )
-    label_mensagem.pack(expand=True, pady=20)
-
-    # Botão para fechar a janela
-    btn_fechar = tk.Button(
-        root,
-        text="Fechar",
-        font=("Arial", 10, "bold"),
-        command=root.destroy,  # Fecha a janela
-        bg="red",
-        fg="white"
-    )
-    btn_fechar.pack(pady=10)
-
-    # Mantém a janela aberta
-    root.mainloop()
-
-#FIM
-# ---------------------------------------------------------------------------------------------------------------------- #
-
 
 
 
