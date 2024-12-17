@@ -16,6 +16,11 @@ import tkinter as tk
 from selenium.webdriver import ActionChains
 import matplotlib.pyplot as plt
 from tkinter import messagebox
+from packaging.version import Version as LooseVersion
+from selenium import webdriver
+from selenium_stealth import stealth
+
+
 
 
 import requests
