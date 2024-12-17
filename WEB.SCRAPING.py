@@ -144,54 +144,25 @@ def digitar_lentamente(element, texto):
         time.sleep(random.uniform(0.1, 0.5))
 
 
-# Função para capturar o código do usuário manualmente com tkinter
+# Substituição das funções antigas com Tkinter
 def solicitar_codigo():
-    def obter_codigo():
-        global codigo
-        codigo = codigo_input.get()  # Armazena o código digitado
-        janela.destroy()  # Fecha a janela após clicar em "OK"
+    st.markdown("### Insira o Código de Verificação")
+    codigo = st.text_input("Digite o código de 6 dígitos enviado para seu email:", max_chars=6)
+    if st.button("Enviar Código"):
+        if codigo:
+            st.success(f"Código inserido com sucesso: {codigo}")
+            return codigo
+        else:
+            st.error("Por favor, insira o código.")
+    return None
 
-    # Cria a janela
-    janela = tk.Tk()
-    janela.title("Insira o Código de Verificação")
-    janela.geometry("400x200")  # Ajuste o tamanho da janela (largura x altura)
-    janela.configure(bg="#f0f0f0")  # Cor de fundo da janela
+def exibir_mensagem_alerta(mensagem):
+    st.markdown("### ⚠️ Alerta")
+    st.error(mensagem)
+    if st.button("Fechar"):
+        st.stop()  # Encerra o script do Streamlit
 
-    # Carregar e exibir um logo, se houver
-    try:
-        logo = tk.PhotoImage(file="caminho/para/seu_logo.png")  # Caminho para o arquivo de imagem
-        logo_label = tk.Label(janela, image=logo, bg="#f0f0f0")
-        logo_label.pack(pady=5)
-    except Exception as e:
-        print("Erro ao carregar a imagem do logo:", e)
 
-    # Label e campo de entrada personalizados
-    tk.Label(
-        janela, 
-        text="Digite o código de 6 dígitos enviado para seu email:", 
-        font=("Helvetica", 12),  # Fonte e tamanho da fonte
-        fg="#333333",  # Cor da fonte
-        bg="#f0f0f0"  # Cor de fundo do label
-    ).pack(pady=10)
-
-    # Entrada para o código
-    codigo_input = tk.Entry(janela, font=("Helvetica", 14), justify="center")  # Centraliza o texto
-    codigo_input.pack(pady=5)
-
-    # Botão para enviar o código com cor personalizada
-    tk.Button(
-        janela, 
-        text="OK", 
-        command=obter_codigo, 
-        font=("Helvetica", 12), 
-        fg="#ffffff",  # Cor da fonte do botão
-        bg="#4CAF50",  # Cor de fundo do botão
-        activebackground="#45a049",  # Cor de fundo quando o botão é clicado
-        activeforeground="#ffffff"  # Cor da fonte quando o botão é clicado
-    ).pack(pady=10)
-
-    # Inicia o loop da interface gráfica
-    janela.mainloop()
 
 
 # ---------------------------------------------------------------------------------------------------------------------- #
@@ -809,35 +780,56 @@ def mensagem_fim_script():
 
 
 # ---------------------------------------------------------------------------------------------------------------------- #
-#INICIO DO FLUXO
-
+# INICIO DO FLUXO
 
 if processar:
     if not lista_empresas:
         st.error("Erro: Lista de empresas está vazia. Carregue o arquivo Excel antes de iniciar.")
     else:
+        st.success("Iniciando o processo de raspagem...")
+        
+        # Inicializa o navegador
         navegador = start_scraping()
-
+        
         # Fluxo de login no portal
+        st.write("Realizando login no portal...")
         colocar_email(navegador)
         colocar_senha(navegador)
-        receber_cod(navegador)
-        inserir_cod(navegador)
+        
+        # Recebe o código de verificação
+        st.markdown("### Recebendo Código de Verificação")
+        receber_cod(navegador)  # Simula o recebimento do código no navegador
+        
+        # Solicita o código manualmente via Streamlit
+        codigo = solicitar_codigo()
+        if not codigo:
+            exibir_mensagem_alerta("Erro: Código de verificação não foi fornecido. Processo encerrado.")
+            st.stop()
+        
+        # Insere o código no navegador
+        inserir_cod(navegador, codigo)  # Ajuste a função para aceitar o código como argumento
+        
+        # Continuação do fluxo
+        st.write("Processo de login concluído, prosseguindo com a raspagem...")
         tela_05(navegador)
 
         # Pesquisando a primeira empresa
+        st.write("Pesquisando a primeira empresa...")
         clicar_input_pesquisa(navegador)  # Clica no campo de pesquisa
         digitar_primeira_empresa(navegador)  # Digita e seleciona a empresa
 
         # Tenta clicar no botão 'Pedidos'
+        st.write("Clicando na aba 'Pedidos'...")
         clicar_aba_pedidos(navegador)
 
         # Abrir a janela de trocar loja
+        st.write("Abrindo janela de troca de loja...")
         clicar_trocar_loja(navegador)
 
-
         # Loop de Download
+        st.write("Iniciando o loop de download...")
         loop(navegador, lista_empresas)
 
-        # Chama a função ao final do script
+        # Mensagem final do script
         mensagem_fim_script()
+        st.success("Processo de raspagem concluído com sucesso!")
