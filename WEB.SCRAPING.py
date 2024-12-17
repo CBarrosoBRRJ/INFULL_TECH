@@ -69,7 +69,7 @@ st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 # ---------------------------------------- #
 
 # Adicionando imagem no topo da barra lateral
-st.sidebar.image("images/infulltech.jpg", use_column_width=True)
+st.sidebar.image("images/infulltech.jpg", use_container_width=True)
 st.sidebar.markdown("<h1 style='text-align: center; width: 100%;'>Infull Tech</h1>", unsafe_allow_html=True)
 
 # Botão para carregar o arquivo Excel
