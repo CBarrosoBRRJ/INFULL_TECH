@@ -1,4 +1,19 @@
 # Importando Bibliotecas
+
+
+# Corrigir importação para evitar erro no Python 3.12
+import sys
+import types
+
+# Simula o LooseVersion usando packaging.version
+if "distutils.version" not in sys.modules:
+    version_module = types.ModuleType("version")
+    sys.modules["distutils.version"] = version_module
+    from packaging.version import Version as LooseVersion
+    version_module.LooseVersion = LooseVersion
+
+import undetected_chromedriver as uc
+
 import streamlit as st
 import pandas as pd
 import time
@@ -19,6 +34,7 @@ from tkinter import messagebox
 from packaging.version import Version as LooseVersion
 from selenium import webdriver
 from selenium_stealth import stealth
+
 
 
 
