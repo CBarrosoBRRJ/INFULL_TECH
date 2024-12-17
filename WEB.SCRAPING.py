@@ -9,6 +9,11 @@ if "distutils.version" not in sys.modules:
     from packaging.version import Version as LooseVersion
     version_module.LooseVersion = LooseVersion
 
+try:
+    from packaging.version import Version as LooseVersion
+except:
+    pass
+
 # Bibliotecas Selenium
 import undetected_chromedriver as uc
 from selenium import webdriver
