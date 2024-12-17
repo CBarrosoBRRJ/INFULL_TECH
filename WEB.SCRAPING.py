@@ -3,7 +3,11 @@
 
 import sys
 import types
-from packaging.version import Version as LooseVersion
+if "distutils.version" not in sys.modules:
+    version_module = types.ModuleType("version")
+    sys.modules["distutils.version"] = version_module
+    from packaging.version import Version as LooseVersion
+    version_module.LooseVersion = LooseVersion
 
 # Bibliotecas Selenium
 import undetected_chromedriver as uc
