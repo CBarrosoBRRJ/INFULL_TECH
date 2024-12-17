@@ -129,9 +129,16 @@ if processar:
 
 # Função para iniciar o navegador
 def iniciar_navegador():
-    options = webdriver.ChromeOptions()
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36")
-    navegador = uc.Chrome(options=options)
+    try:
+        options = webdriver.ChromeOptions()
+    except:
+            options = uc.ChromeOptions()
+    try:
+        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36")
+        navegador = uc.Chrome(options=options)
+    except:
+        options.add_argument("--headless")  # Opcional: roda o navegador em modo headless
+        options.add_argument("--disable-blink-features=AutomationControlled")
     return navegador
 
 # Função para simular rolagem da página para baixo
