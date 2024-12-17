@@ -241,22 +241,34 @@ def start_scraping():
 #TELA 01 - COLOCAR O EMAIL
 
 # Função para a Tela 01
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
+
 def colocar_email(navegador):
-    # Aguarda até que o campo de email esteja presente na página (espera até 10 segundos)
     try:
+        # Aguarda a página carregar completamente
+        WebDriverWait(navegador, 15).until(
+            lambda driver: driver.execute_script("return document.readyState") == "complete"
+        )
+
+        # Aguarda até o campo de email estar visível
         campo_email = WebDriverWait(navegador, 15).until(
             EC.visibility_of_element_located((By.XPATH, '//*[@id="email"]'))
         )
-        digitar_lentamente(campo_email, 'portalinfull@gmail.com')
+        campo_email.send_keys('portalinfull@gmail.com')
 
-        # Define e clica no botão de login após a digitação do email
+        # Clica no botão de login
         botao_login = WebDriverWait(navegador, 15).until(
-            EC.visibility_of_element_located((By.XPATH, '//*[@id="app"]/div[1]/div[1]/div[2]/div[2]/main/form/button'))
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/div[1]/div[2]/div[2]/main/form/button'))
         )
         botao_login.click()
         print("Botão de login clicado.")
+
     except TimeoutException:
-        print("O campo de email ou o botão de login não foi carregado a tempo.")
+        print("Erro: O campo de email ou botão de login não foi encontrado a tempo.")
+
 
 #FIM
 # ---------------------------------------------------------------------------------------------------------------------- #
