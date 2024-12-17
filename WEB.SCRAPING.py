@@ -128,18 +128,19 @@ if processar:
 ### --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Função para iniciar o navegador
+import undetected_chromedriver as uc
+
 def iniciar_navegador():
     try:
-        options = webdriver.ChromeOptions()
-    except:
-            options = uc.ChromeOptions()
-    try:
-        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36")
-        navegador = uc.Chrome(options=options)
-    except:
-        options.add_argument("--headless")  # Opcional: roda o navegador em modo headless
+        options = uc.ChromeOptions()
+        options.add_argument("--headless")  # Executar o navegador sem interface gráfica (opcional)
         options.add_argument("--disable-blink-features=AutomationControlled")
-    return navegador
+        navegador = uc.Chrome(options=options)  # Tentativa de inicializar o navegador
+        return navegador
+    except Exception as e:
+        print(f"Erro ao iniciar o navegador: {e}")
+        return None  # Retorna None caso o navegador falhe
+
 
 # Função para simular rolagem da página para baixo
 def rolar_pagina(navegador):
