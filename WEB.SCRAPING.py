@@ -1,43 +1,34 @@
 # Importando Bibliotecas
 
 
-# Corrigir importação para evitar erro no Python 3.12
 import sys
 import types
+from packaging.version import Version as LooseVersion
 
-# Simula o LooseVersion usando packaging.version
-if "distutils.version" not in sys.modules:
-    version_module = types.ModuleType("version")
-    sys.modules["distutils.version"] = version_module
-    from packaging.version import Version as LooseVersion
-    version_module.LooseVersion = LooseVersion
-
+# Bibliotecas Selenium
 import undetected_chromedriver as uc
-
-import streamlit as st
-import pandas as pd
-import time
-import os
-import shutil
-import random
-from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-import undetected_chromedriver as uc
 from selenium.webdriver import ActionChains
-import matplotlib.pyplot as plt
-from tkinter import messagebox
-from packaging.version import Version as LooseVersion
-from selenium import webdriver
 from selenium_stealth import stealth
 
 
+# Streamlit e Manipulação de Dados
+import streamlit as st
+import pandas as pd
+import os
+import shutil
+import random
+import time
+from datetime import datetime
 
+# Gráficos
+import matplotlib.pyplot as plt
 
-
+#Request
 import requests
 from msal import PublicClientApplication
 
