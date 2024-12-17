@@ -141,26 +141,28 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 
-from selenium import webdriver
+from selenium import webdriver  # Certifique-se de importar o webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+import streamlit as st  # Importa o Streamlit
+
 
 def iniciar_navegador():
     try:
-        print("Iniciando navegador Chrome...")
+        print("Tentando inicializar o Chrome...")
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")  # Executa sem interface gráfica (opcional)
-        options.add_argument("--disable-gpu")  # Corrige problemas de GPU em alguns ambientes
-        options.add_argument("--disable-extensions")
-        
-        # Inicializa o ChromeDriver usando o webdriver-manager
+        options.add_argument("--headless")  # Sem interface gráfica
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+
+        # Inicializa o ChromeDriver
         service = Service(ChromeDriverManager().install())
         navegador = webdriver.Chrome(service=service, options=options)
         
         print("Navegador inicializado com sucesso!")
         return navegador
     except Exception as e:
-        print(f"Erro ao inicializar o navegador: {e}")
+        print(f"Erro ao inicializar o Chrome: {e}")
         return None
 
 
@@ -216,12 +218,16 @@ def start_scraping():
         return None  # Encerra a função caso o navegador não inicie
 
     try:
+        st.success("Navegador inicializado com sucesso!")
         navegador.get('https://portal.ifood.com.br/')
+        print("Título da página:", navegador.title)
+
         return navegador
     except Exception as e:
         st.error(f"Erro ao acessar a página: {e}")
         navegador.quit()
         return None
+
 
 
 #FIM
