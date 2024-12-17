@@ -130,16 +130,25 @@ if processar:
 # Função para iniciar o navegador
 import undetected_chromedriver as uc
 
+
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
 def iniciar_navegador():
     try:
-        options = uc.ChromeOptions()
-        options.add_argument("--headless")  # Executar o navegador sem interface gráfica (opcional)
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")  # Executar sem interface gráfica
         options.add_argument("--disable-blink-features=AutomationControlled")
-        navegador = uc.Chrome(options=options)  # Tentativa de inicializar o navegador
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+
+        navegador = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         return navegador
     except Exception as e:
-        print(f"Erro ao iniciar o navegador: {e}")
-        return None  # Retorna None caso o navegador falhe
+        print(f"Erro ao inicializar o navegador: {e}")
+        return None
+
+
 
 
 # Função para simular rolagem da página para baixo
@@ -182,19 +191,20 @@ def exibir_mensagem_alerta(mensagem):
 def start_scraping():
     st.text("Download em Andamento...")
 
-    # Configurações de download
-    local_download = os.path.join(os.path.expanduser("~"), "Downloads")
-    dir_pedidos = os.path.join(local_download, "DOWNLOAD-PEDIDOS-IFOOD")  # Cria a pasta "PEDIDOS" na pasta de Downloads do usuário
-
-    # Verifica se a pasta "PEDIDOS" existe; caso contrário, cria a pasta
-    if not os.path.exists(dir_pedidos):
-        os.makedirs(dir_pedidos)
-        print("Pasta 'PEDIDOS' criada na pasta de Downloads do usuário.")
-
-    # Inicia o navegador
+    # Inicializa o navegador
     navegador = iniciar_navegador()
-    navegador.get('https://portal.ifood.com.br/')
-    return navegador
+    if not navegador:
+        st.error("Erro ao inicializar o navegador. Verifique o ChromeDriver e a configuração.")
+        return None  # Encerra a função caso o navegador não inicie
+
+    try:
+        navegador.get('https://portal.ifood.com.br/')
+        return navegador
+    except Exception as e:
+        st.error(f"Erro ao acessar a página: {e}")
+        navegador.quit()
+        return None
+
 
 #FIM
 # ---------------------------------------------------------------------------------------------------------------------- #
