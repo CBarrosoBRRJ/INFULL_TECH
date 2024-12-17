@@ -138,15 +138,22 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
+
+
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 def iniciar_navegador():
     try:
-        # Configurações do Chrome
+        print("Iniciando navegador Chrome...")
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")  # Sem interface gráfica
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--headless")  # Executa sem interface gráfica (opcional)
+        options.add_argument("--disable-gpu")  # Corrige problemas de GPU em alguns ambientes
+        options.add_argument("--disable-extensions")
         
-        # Inicializar o ChromeDriver com Service
+        # Inicializa o ChromeDriver usando o webdriver-manager
         service = Service(ChromeDriverManager().install())
         navegador = webdriver.Chrome(service=service, options=options)
         
@@ -155,6 +162,8 @@ def iniciar_navegador():
     except Exception as e:
         print(f"Erro ao inicializar o navegador: {e}")
         return None
+
+
 
 
 
